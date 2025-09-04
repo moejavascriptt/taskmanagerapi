@@ -1,8 +1,22 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const Book = require('./models/Book')
 //express instance
 const app = express()
 const PORT = 5000
+
+//connect to DB
+mongoose
+  .connect(
+    'mongodb+srv://mauriceg:gYQ930Yd33WtI1pR@book-api.ie4d73x.mongodb.net/?retryWrites=true&w=majority&appName=book-api'
+  )
+  .then(() => {
+    console.log('MongoDB Connected')
+  })
+
+  .catch(e => {
+    console.log(e)
+  })
 
 //middlewares
 app.use(express.json()) //pass JSON data
@@ -23,7 +37,7 @@ app.post('/api/v1/books', async (req, res) => {
       author,
       genre,
       publishedYear,
-      isAvaliable
+      isAvailable
     })
     // send the response to the user
     res.status(201).json(book)

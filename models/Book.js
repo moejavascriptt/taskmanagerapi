@@ -9,7 +9,7 @@ const bookSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Published year is required']
     },
-    isAvaliable: {
+    isAvailable: {
       type: Boolean,
       default: true
     }
