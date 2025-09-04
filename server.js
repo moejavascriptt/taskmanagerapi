@@ -86,4 +86,16 @@ app.delete('/api/v1/books/:id', async (req, res) => {
   }
 })
 
+//update a book
+app.put('/api/v1/books/:id', async (req, res) => {
+  try {
+    const bookUpdated = await Book.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    })
+    res.status(200).json(bookUpdated)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
 app.listen(PORT, console.log('Server is running on port ${PORT}'))
