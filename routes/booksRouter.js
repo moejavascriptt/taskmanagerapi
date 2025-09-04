@@ -1,32 +1,9 @@
 const express = require('express')
-const mongoose = require('mongoose')
-const bookRouter = require('./routes/booksRouter')
 
-//express instance
-const app = express()
-const PORT = 5000
-
-//connect to DB
-mongoose
-  .connect(
-    'mongodb+srv://mauriceg:gYQ930Yd33WtI1pR@book-api.ie4d73x.mongodb.net/?retryWrites=true&w=majority&appName=book-api'
-  )
-  .then(() => {
-    console.log('MongoDB Connected')
-  })
-
-  .catch(e => {
-    console.log(e)
-  })
-
-//middlewares
-app.use(express.json()) //pass JSON data
-
-// routes
-app.use('/', bookRouter)
+const bookRouter = express.Router()
 
 // create new book
-app.post('/api/v1/books', async (req, res) => {
+bookRouter.post('/api/v1/books', async (req, res) => {
   try {
     // req.body === the data the user wants to save
     const { title, name, isAvailable, publishedYear, genre, author } = req.body
@@ -52,7 +29,7 @@ app.post('/api/v1/books', async (req, res) => {
 })
 
 //fetch all books
-app.get('/api/v1/books', async (req, res) => {
+bookRouter.get('/api/v1/books', async (req, res) => {
   try {
     const books = await Book.find()
     res.status(200).json(books)
@@ -62,7 +39,8 @@ app.get('/api/v1/books', async (req, res) => {
 })
 
 //fetch a book
-app.get('/api/v1/books/:bookId', async (req, res) => {
+bookRouter
+.get('/api/v1/books/:bookId', async (req, res) => {
   try {
     const book = await Book.findById(req.params.bookId)
     res.status(200).json(book)
@@ -71,7 +49,8 @@ app.get('/api/v1/books/:bookId', async (req, res) => {
   }
 })
 
-app.get('/api/v1/books/:bookId', async (req, res) => {
+bookRouter
+.get('/api/v1/books/:bookId', async (req, res) => {
   try {
     const book = await Book.findById(req.params.bookId)
     res.status(200).json(book)
@@ -81,7 +60,8 @@ app.get('/api/v1/books/:bookId', async (req, res) => {
 })
 
 //delete a book
-app.delete('/api/v1/books/:id', async (req, res) => {
+bookRouter
+.delete('/api/v1/books/:id', async (req, res) => {
   try {
     await Book.findByIdAndDelete(req.params.id)
     res.status(200).json({ message: 'Book deleted successfully ' })
@@ -91,7 +71,8 @@ app.delete('/api/v1/books/:id', async (req, res) => {
 })
 
 //update a book
-app.put('/api/v1/books/:id', async (req, res) => {
+bookRouter
+.put('/api/v1/books/:id', async (req, res) => {
   try {
     const bookUpdated = await Book.findByIdAndUpdate(req.params.id, req.body, {
       new: true
@@ -102,4 +83,6 @@ app.put('/api/v1/books/:id', async (req, res) => {
   }
 })
 
-app.listen(PORT, console.log('Server is running on port ${PORT}'))
+
+
+module.exports = bookRouter
